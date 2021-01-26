@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GraphQL;
 using GraphQL.Types;
 using RepoInterfaceLib;
@@ -87,14 +88,14 @@ namespace TraderModelLib.Mutations
                             }
                             else
                             {
-                                trader.Id = ++TraderDbContext.currentId;
+                                trader.Id = TraderDbContext.CurrentId;
                                 tradersToInsert.Add(trader);
                             }
 
                             foreach (var email in dctTraderEmailToCurrencyId.Keys)
                                 if (email == trader.Email)
                                     foreach (var currencyId in dctTraderEmailToCurrencyId[email])
-                                        t2csToInsert.Add(new TraderToCurrency { Id = ++TraderDbContext.currentId, TraderId = trader.Id, CurrencyId = currencyId });
+                                        t2csToInsert.Add(new TraderToCurrency { Id = TraderDbContext.CurrentId, TraderId = trader.Id, CurrencyId = currencyId });
                         }
 
                         t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList());

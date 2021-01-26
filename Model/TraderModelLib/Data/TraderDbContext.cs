@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using TraderModelLib.Models;
 
@@ -6,7 +7,10 @@ namespace TraderModelLib.Data
 {
     public class TraderDbContext : DbContext
     {
-        public static int currentId = 100;
+        private static int _currentId = 100;
+
+        public static int CurrentId => Interlocked.Increment(ref _currentId);
+
 
         public static string ConnectionString { private get; set; }
 

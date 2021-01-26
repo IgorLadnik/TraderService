@@ -1,0 +1,48 @@
+query AllTraders {
+  allTradersQuery {
+    traders(sortBy: "!age") {
+      id
+      firstName
+      lastName
+      birthdate
+      email
+      password
+      isDeleted
+      cryptocurrencies {
+        id
+        currency
+        symbol
+      }
+    }
+  }
+}
+
+mutation TraderMutation {
+  traderMutation {
+    createTraders(
+      tradersInput: [
+      {
+        firstName: "Lior"
+        lastName: "Levy"
+        birthdate: "1950-01-01"
+        email: "llevy@trader.com"
+        password: "lll"    
+        isDeleted: false
+        cryptocurrencies: [{ id: 0 }{ id: 1 }]
+   	  }
+      {
+        firstName: "Ann"
+        lastName: "Linders"
+        birthdate: "1980-01-01"
+        email: "annl@trader.com"
+        password: "lll"    
+        isDeleted: false
+        cryptocurrencies: [{ id: 0 }{ id: 0 }]
+   	  }
+      ]
+    ) {
+      status
+      message
+    }
+  }
+}
