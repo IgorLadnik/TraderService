@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Linq.Dynamic.Core;
 using GraphQL.Types;
 using GraphQlHelperLib;
 using TraderModelLib.Data;
@@ -14,19 +15,21 @@ namespace TraderModelLib.Queries
             FieldAsync<ListGraphType<TraderType>>("traders",
                 arguments: new QueryArguments(
                         new QueryArgument<BooleanGraphType> { Name = "isDeleted" },
-                        new QueryArgument<StringGraphType> { Name = "sortBy" }
+                        new QueryArgument<StringGraphType> { Name = "sortBy" },
+                        new QueryArgument<IntGraphType> { Name = "pageSize" },
+                        new QueryArgument<IntGraphType> { Name = "currentPage" }
                     ), 
                 resolve: async context =>
                 {
                     var isDeletedNullable = context.Arguments["isDeleted"];
                     var isDeleted = isDeletedNullable != null ? (bool)isDeletedNullable : false;
-
                     var sortBy = (string)context.Arguments["sortBy"];
 
                     var traders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => t.IsDeleted == isDeleted).ToList());
 
-                    if (!string.IsNullOrEmpty(sortBy)) 
-                        switch (sortBy.ToLower()) 
+                    if (!string.IsNullOrEmpty(sortBy))
+                    {
+                        switch (sortBy.ToLower())
                         {
                             case "birthdate":
                             case "age":
@@ -46,9 +49,19 @@ namespace TraderModelLib.Queries
                                 traders = traders.OrderByDescending(t => t.Email).ToList();
                                 break;
                         }
+                    }
 
                     context.SetCache<GqlCache>("traderIds", traders.Select(t => t.Id).ToList());
-                    return traders;
+
+                    // Pagination
+                    var pageSizeNullable = context.Arguments["pageSize"];
+                    var pageSize = pageSizeNullable != null ? (int)pageSizeNullable : 0;
+                    if (pageSize == 0)
+                        return traders;
+
+                    var currentPageNullable = context.Arguments["currentPage"];
+                    var currentPage = currentPageNullable != null ? (int)currentPageNullable : 0;
+                    return traders.Skip(currentPage * pageSize).Take(pageSize).ToList();
                 });
         }
     }
