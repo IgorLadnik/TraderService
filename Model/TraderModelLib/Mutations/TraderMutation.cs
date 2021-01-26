@@ -96,7 +96,8 @@ mutation TraderMutation {
         lastName: "Mukerjee"
         birthdate: "1960-01-01"
         email: "amitm@trader.com"
-        password: "aaa"         
+        password: "aaa"       
+        isDeleted = false
         cryptocurrencies: [{
        	  id: 1
         }]
