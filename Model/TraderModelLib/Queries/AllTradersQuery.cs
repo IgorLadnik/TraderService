@@ -7,9 +7,9 @@ using RepoInterfaceLib;
 
 namespace TraderModelLib.Queries
 {
-    public class TraderQuery : ObjectGraphType
+    public class AllTradersQuery : ObjectGraphType
     {
-        public TraderQuery(IRepo<TraderDbContext> repo)
+        public AllTradersQuery(IRepo<TraderDbContext> repo)
         {
             FieldAsync<ListGraphType<TraderType>>("traders",
                 arguments: new QueryArguments(new QueryArgument<BooleanGraphType> { Name = "isDeleted" }), 
@@ -25,8 +25,8 @@ namespace TraderModelLib.Queries
 }
 
 /*
-query Traders {
-  traderQuery {
+query AllTraders {
+  allTradersQuery {
     traders(isDeleted: false) {
       id
       firstName

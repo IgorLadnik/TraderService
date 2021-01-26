@@ -32,7 +32,7 @@ namespace TraderModelLib
 
             // Queries
             services.AddTransient<RootQuery>();
-            services.AddTransient<TraderQuery>();
+            services.AddTransient<AllTradersQuery>();
             services.AddTransient<ActiveTradersQuery>();
 
             // Mutations

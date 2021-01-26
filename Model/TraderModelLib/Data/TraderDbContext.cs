@@ -32,18 +32,18 @@ namespace TraderModelLib.Data
             );
 
             modelBuilder.Entity<Cryptocurrency>().HasData(
-             new { Id = 0, Currency = "Bitcoin",  Symbol = "XBT" },
-             new { Id = 1, Currency = "Litecoin", Symbol = "LTC" },
-             new { Id = 2, Currency = "Namecoin", Symbol = "NMC" }
+                new { Id = 0, Currency = "Bitcoin",  Symbol = "XBT" },
+                new { Id = 1, Currency = "Litecoin", Symbol = "LTC" },
+                new { Id = 2, Currency = "Namecoin", Symbol = "NMC" }
             );
 
             modelBuilder.Entity<TraderToCurrency>().HasData(
-             new { Id = 0, TraderId = 0, CurrencyId = 0 },
-             new { Id = 1, TraderId = 0, CurrencyId = 1 },
-             new { Id = 2, TraderId = 0, CurrencyId = 2 },
-             new { Id = 3, TraderId = 1, CurrencyId = 0 },
-             new { Id = 4, TraderId = 1, CurrencyId = 1 },
-             new { Id = 5, TraderId = 1, CurrencyId = 2 }
+                new { Id = 0, TraderId = 0, CurrencyId = 0 },
+                new { Id = 1, TraderId = 0, CurrencyId = 1 },
+                new { Id = 2, TraderId = 0, CurrencyId = 2 },
+                new { Id = 3, TraderId = 1, CurrencyId = 0 },
+                new { Id = 4, TraderId = 1, CurrencyId = 1 },
+                new { Id = 5, TraderId = 1, CurrencyId = 2 }
             );
         }
     }
