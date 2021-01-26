@@ -12,8 +12,8 @@ namespace TraderModelLib.Type
         public CryptocurrencyInputType()
         {
             Field<IntGraphType>("Id");
-            Field<StringGraphType>("Currency");
-            Field<StringGraphType>("Symbol");
+            //Field<StringGraphType>("Currency");
+            //Field<StringGraphType>("Symbol");
         }
     }
 }

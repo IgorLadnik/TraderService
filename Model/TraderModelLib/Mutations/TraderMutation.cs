@@ -12,6 +12,8 @@ namespace TraderModelLib.Mutations
 {
     public class TraderMutation : ObjectGraphType
     {
+        private static int t2cCurrentId = 100; //??
+
         public TraderMutation(IRepo<TraderDbContext> repo)
         {
             FieldAsync<TraderOutputType>("createTraders",
@@ -24,7 +26,7 @@ namespace TraderModelLib.Mutations
                     foreach (var traderInput in context.GetArgument<Dictionary<string, object>[]>("tradersInput"))
                     {
                         Trader trader = new();
-                        Cryptocurrency cryptocurrency = new();
+                        List<int> t2cInputs = new();
                         TraderToCurrency t2c = new();
 
                         object v;
@@ -38,7 +40,7 @@ namespace TraderModelLib.Mutations
                                             v = dctProp[key];
                                             switch (key)
                                             {
-                                                case "id": cryptocurrency.Id = (int)v; break;
+                                                case "id": t2cInputs.Add((int)v); break;
                                             }
                                         }
                                     break;
@@ -58,16 +60,22 @@ namespace TraderModelLib.Mutations
                                     break;
                             }
 
-                        t2c.TraderId = trader.Id;
-                        t2c.CurrencyId = cryptocurrency.Id;
+                        foreach (var currencyId in t2cInputs) 
+                            t2cs.Add(new TraderToCurrency { Id = ++t2cCurrentId, TraderId = trader.Id, CurrencyId = currencyId });
 
                         traders.Add(trader);
-                        t2cs.Add(t2c);
                     }
 
                     // Check if creating traders exist - to update them
+                    List<Trader> tradersToUpdate = new();
+                    List<Trader> tradersToInsert = new();
+                    List<TraderToCurrency> t2csToRemove = new();
+                    List<TraderToCurrency> t2csToInsert = new();
+
+                    List<int> traderIds = new();
+
                     RepoResponse mutationResponse = new() { OpStatus = RepoOperationStatus.Success };
-                    var emails = traders.Select(t => t.Email)?.ToList();
+                    var emails = traders?.Select(t => t.Email)?.ToList();
                     if (emails?.Count > 0)
                     {
                         var existingTraders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => emails.Contains(t.Email)).ToList());
@@ -81,24 +89,24 @@ namespace TraderModelLib.Mutations
                                         t2c.TraderId = existingTrader.Id;
 
                                 trader.Id = existingTrader.Id;
+
+                                tradersToUpdate.Add(trader);
+                                traderIds.Add(trader.Id);
                             }
+                            else
+                                tradersToInsert.Add(trader);
                         }
 
-                        // Transaction to remove collided existing entries, if any
-                        mutationResponse = await repo.SaveAsync(dbContext =>
-                        {
-                            dbContext.Traders?.RemoveRange(existingTraders);
-                            dbContext.T2Cs?.RemoveRange(t2cs);
-                        });
+                        t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList()); 
                     }
 
-                    // Transaction to insert created / updated entries
-                    if (mutationResponse.IsOK)
-                        mutationResponse = await repo.SaveAsync(dbContext =>
-                        {
-                            dbContext.Traders?.AddRange(traders);
-                            dbContext.T2Cs?.AddRange(t2cs);
-                        });
+                    mutationResponse = await repo.SaveAsync(dbContext =>
+                    {
+                        dbContext.T2Cs?.RemoveRange(t2csToRemove);
+                        dbContext.Traders?.UpdateRange(tradersToUpdate);
+                        dbContext.Traders?.AddRange(tradersToInsert);
+                        dbContext.T2Cs?.AddRange(t2cs);
+                    });
 
                     return mutationResponse;
                 });

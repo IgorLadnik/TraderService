@@ -26,7 +26,7 @@ namespace TraderModelLib.Data
         {
             modelBuilder.Entity<Trader>().HasData(
                 new { Id = 1, FirstName = "Vasya", LastName = "Pupkin", Birthdate = new DateTime(1990, 1, 1),  Email = "vpupkin@trader.com".ToLower(), IsDeleted = false, Password = "vvv" },
-                new { Id = 2, FirstName = "Moshe", LastName = "Levy", Birthdate = new DateTime(1991, 1, 1), Email = "mlevy@trader.com".ToLower(), IsDeleted = false, Password = "mmm" }
+                new { Id = 2, FirstName = "Moshe", LastName = "Levy", Birthdate = new DateTime(1991, 1, 1), Email = "mlevy@trader.com", IsDeleted = false, Password = "mmm" }
             );
 
             modelBuilder.Entity<Cryptocurrency>().HasData(
