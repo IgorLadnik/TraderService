@@ -100,15 +100,14 @@ namespace TraderModelLib.Mutations
                         t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList());
                     }
 
-                    mutationResponse = await repo.SaveAsync(dbContext =>
+                    // Save changes with a transaction 
+                    return await repo.SaveAsync(dbContext =>
                     {
                         dbContext.T2Cs?.RemoveRange(t2csToRemove);
                         dbContext.Traders?.UpdateRange(tradersToUpdate);
                         dbContext.Traders?.AddRange(tradersToInsert);
                         dbContext.T2Cs?.AddRange(t2csToInsert);
                     });
-
-                    return mutationResponse;
                 });
         }
     }
