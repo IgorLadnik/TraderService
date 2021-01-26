@@ -11,12 +11,15 @@ namespace TraderModelLib.Queries
     {
         public TraderQuery(IRepo<TraderDbContext> repo)
         {
-            FieldAsync<ListGraphType<TraderType>>("traders", resolve: async context =>
-            {
-                var traders = await repo.FetchAsync(dbContext => dbContext.Traders.ToList());
-                context.SetCache<GqlCache>("traderIds", traders.Select(t => t.Id).ToList());
-                return traders;
-            });
+            FieldAsync<ListGraphType<TraderType>>("traders",
+                arguments: new QueryArguments(new QueryArgument<BooleanGraphType> { Name = "isDeleted" }), 
+                resolve: async context =>
+                {
+                    var isDeleted = (bool)context.Arguments["isDeleted"];
+                    var traders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => t.IsDeleted == isDeleted).ToList());
+                    context.SetCache<GqlCache>("traderIds", traders.Select(t => t.Id).ToList());
+                    return traders;
+                });
         }
     }
 }
@@ -24,7 +27,7 @@ namespace TraderModelLib.Queries
 /*
 query Traders {
   traderQuery {
-    traders {
+    traders(isDeleted: false) {
       id
       firstName
       lastName
