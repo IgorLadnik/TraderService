@@ -12,6 +12,8 @@ namespace TraderModelLib.Mutations
 {
     public class TraderMutation : ObjectGraphType
     {
+        private static int t2cCurrentId = 100; //??
+
         public TraderMutation(IRepo<TraderDbContext> repo)
         {
             FieldAsync<TraderOutputType>("createTraders",
@@ -19,8 +21,8 @@ namespace TraderModelLib.Mutations
                 resolve: async context =>
                 {
                     List<Trader> traders = new();
-                    Dictionary<string, List<int>> dctTraderEmailToCurrencyId = new(); 
-                    
+                    List<TraderToCurrency> t2cs = new();
+
                     foreach (var traderInput in context.GetArgument<Dictionary<string, object>[]>("tradersInput"))
                     {
                         Trader trader = new();
@@ -47,6 +49,7 @@ namespace TraderModelLib.Mutations
                                     v = prop.Value;
                                     switch (prop.Key)
                                     {
+                                        case "id": trader.Id = (int)v; break;
                                         case "firstName": trader.FirstName = (string)v; break;
                                         case "lastName": trader.LastName = (string)v; break;
                                         case "birthdate": trader.Birthdate = (DateTime)v; break;
@@ -57,7 +60,8 @@ namespace TraderModelLib.Mutations
                                     break;
                             }
 
-                        dctTraderEmailToCurrencyId[trader.Email] = t2cInputs;
+                        foreach (var currencyId in t2cInputs) 
+                            t2cs.Add(new TraderToCurrency { Id = ++t2cCurrentId, TraderId = trader.Id, CurrencyId = currencyId });
 
                         traders.Add(trader);
                     }
@@ -80,24 +84,20 @@ namespace TraderModelLib.Mutations
                             var existingTrader = existingTraders?.Where(et => et.Email == trader.Email).FirstOrDefault();
                             if (existingTrader != null)
                             {
+                                foreach (var t2c in t2cs)
+                                    if (t2c.TraderId == trader.Id)
+                                        t2c.TraderId = existingTrader.Id;
+
                                 trader.Id = existingTrader.Id;
 
                                 tradersToUpdate.Add(trader);
                                 traderIds.Add(trader.Id);
                             }
                             else
-                            {
-                                trader.Id = ++TraderDbContext.currentId;
                                 tradersToInsert.Add(trader);
-                            }
-
-                            foreach (var email in dctTraderEmailToCurrencyId.Keys)
-                                if (email == trader.Email)
-                                    foreach (var currencyId in dctTraderEmailToCurrencyId[email])
-                                        t2csToInsert.Add(new TraderToCurrency { Id = ++TraderDbContext.currentId, TraderId = trader.Id, CurrencyId = currencyId });
                         }
 
-                        t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList());
+                        t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList()); 
                     }
 
                     // Save changes with a transaction 
@@ -106,7 +106,7 @@ namespace TraderModelLib.Mutations
                         dbContext.T2Cs?.RemoveRange(t2csToRemove);
                         dbContext.Traders?.UpdateRange(tradersToUpdate);
                         dbContext.Traders?.AddRange(tradersToInsert);
-                        dbContext.T2Cs?.AddRange(t2csToInsert);
+                        dbContext.T2Cs?.AddRange(t2cs);
                     });
                 });
         }
@@ -118,6 +118,7 @@ mutation TraderMutation {
   traderMutation {
     createTraders(
       tradersInput: [{
+        id: 10
         firstName: "Amit"
         lastName: "Mukerjee"
         birthdate: "1960-01-01"

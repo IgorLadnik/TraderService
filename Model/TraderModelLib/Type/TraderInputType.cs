@@ -11,6 +11,7 @@ namespace TraderModelLib.Type
     {
         public TraderInputType()
         {
+            Field<IntGraphType>("Id");
             Field<StringGraphType>("FirstName");
             Field<StringGraphType>("LastName");
             Field<DateGraphType>("Birthdate");
