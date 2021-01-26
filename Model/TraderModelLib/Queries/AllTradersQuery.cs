@@ -53,26 +53,3 @@ namespace TraderModelLib.Queries
         }
     }
 }
-
-//OrderByDescending
-
-/*
-query AllTraders {
-  allTradersQuery {
-    traders(isDeleted: false, sortBy: "age") {
-      id
-      firstName
-      lastName
-      birthdate
-      email
-      password
-      isDeleted
-      cryptocurrencies {
-        id
-        currency
-        symbol
-      }
-    }
-  }
-}
-*/

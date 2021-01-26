@@ -114,26 +114,4 @@ namespace TraderModelLib.Mutations
     }
 }
 
-/*
-mutation TraderMutation {
-  traderMutation {
-    createTraders(
-      tradersInput: [{
-        firstName: "Amit"
-        lastName: "Mukerjee"
-        birthdate: "1960-01-01"
-        email: "amitm@trader.com"
-        password: "aaa"       
-        isDeleted = false
-        cryptocurrencies: [{
-       	  id: 1
-        }]
-   	  }]
-    ) {
-      status
-      message
-    }
-  }
-}
-*/
 
