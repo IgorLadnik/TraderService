@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using GraphQL;
 using GraphQL.Types;
 using RepoInterfaceLib;
