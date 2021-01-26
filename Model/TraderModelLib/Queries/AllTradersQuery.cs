@@ -18,7 +18,9 @@ namespace TraderModelLib.Queries
                     ), 
                 resolve: async context =>
                 {
-                    var isDeleted = (bool)context.Arguments["isDeleted"];
+                    var isDeletedNullable = context.Arguments["isDeleted"];
+                    var isDeleted = isDeletedNullable != null ? (bool)isDeletedNullable : false;
+
                     var sortBy = (string)context.Arguments["sortBy"];
 
                     var traders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => t.IsDeleted == isDeleted).ToList());
