@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphQL;
 using GraphQL.Types;
 using RepoInterfaceLib;
@@ -18,7 +19,6 @@ namespace TraderModelLib.Mutations
                 resolve: async context =>
                 {
                     List<Trader> traders = new();
-                    //List<Cryptocurrency> cryptocurrencies = new();
                     List<TraderToCurrency> t2cs = new();
 
                     foreach (var traderInput in context.GetArgument<Dictionary<string, object>[]>("tradersInput"))
@@ -28,25 +28,19 @@ namespace TraderModelLib.Mutations
                         TraderToCurrency t2c = new();
 
                         object v;
-                        foreach (var item in traderInput)
-                        {
-                            var prop = (KeyValuePair<string, object>)item;
+                        foreach (var prop in traderInput)
                             switch (prop.Key)
                             {
                                 case "cryptocurrencies":
                                     foreach (Dictionary<string, object> dctProp in (IList<object>)prop.Value)
-                                    {
                                         foreach (var key in dctProp.Keys)
                                         {
                                             v = dctProp[key];
                                             switch (key)
                                             {
                                                 case "id": cryptocurrency.Id = (int)v; break;
-                                                //case "currency": cryptocurrency.Currency = (string)v; break;
-                                                //case "symbol": cryptocurrency.Symbol = (string)v; break;
                                             }
                                         }
-                                    }
                                     break;
 
                                 default:
@@ -57,28 +51,54 @@ namespace TraderModelLib.Mutations
                                         case "firstName": trader.FirstName = (string)v; break;
                                         case "lastName": trader.LastName = (string)v; break;
                                         case "birthdate": trader.Birthdate = (DateTime)v; break;
-                                        case "email": trader.Email = (string)v; break;
+                                        case "email": trader.Email = ((string)v)?.ToLower(); break;
                                         case "password": trader.Password = (string)v; break;
                                         case "isDeleted": trader.IsDeleted = (bool)v; break;
                                     }
                                     break;
                             }
-                        }
 
                         t2c.TraderId = trader.Id;
                         t2c.CurrencyId = cryptocurrency.Id;
 
                         traders.Add(trader);
-                        //cryptocurrencies.Add(cryptocurrency);
                         t2cs.Add(t2c);
                     }
 
-                    var mutationResponse = await repo.SaveAsync(dbContext =>
+                    // Check if creating traders exist - to update them
+                    RepoResponse mutationResponse = new() { OpStatus = RepoOperationStatus.Success };
+                    var emails = traders.Select(t => t.Email)?.ToList();
+                    if (emails?.Count > 0)
                     {
-                        dbContext.Traders.AddRange(traders);
-                        //dbContext.Cryptocurrencies.AddRange(cryptocurrencies);
-                        dbContext.T2Cs.AddRange(t2cs);
-                    });
+                        var existingTraders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => emails.Contains(t.Email)).ToList());
+                        foreach (var trader in traders)
+                        {
+                            var existingTrader = existingTraders?.Where(et => et.Email == trader.Email).FirstOrDefault();
+                            if (existingTrader != null)
+                            {
+                                foreach (var t2c in t2cs)
+                                    if (t2c.TraderId == trader.Id)
+                                        t2c.TraderId = existingTrader.Id;
+
+                                trader.Id = existingTrader.Id;
+                            }
+                        }
+
+                        // Transaction to remove collided existing entries, if any
+                        mutationResponse = await repo.SaveAsync(dbContext =>
+                        {
+                            dbContext.Traders?.RemoveRange(existingTraders);
+                            dbContext.T2Cs?.RemoveRange(t2cs);
+                        });
+                    }
+
+                    // Transaction to insert created / updated entries
+                    if (mutationResponse.IsOK)
+                        mutationResponse = await repo.SaveAsync(dbContext =>
+                        {
+                            dbContext.Traders?.AddRange(traders);
+                            dbContext.T2Cs?.AddRange(t2cs);
+                        });
 
                     return mutationResponse;
                 });

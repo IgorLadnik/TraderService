@@ -22,11 +22,6 @@ namespace TraderService.Controllers
             _repo = repo;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
         [HttpGet]
         [Route("all")]
         public async Task<IActionResult> GetAsync()
@@ -60,7 +55,7 @@ namespace TraderService.Controllers
         public async Task<RepoResponse> DeleteAsync(int id)
         {
             Trader trader;
-            RepoResponse repoResponse = new() { Status = "Failure" }; ;
+            RepoResponse repoResponse = new() { OpStatus = RepoOperationStatus.Failure };
             try
             {
                 trader = await _repo.FetchAsync(dbContext => dbContext.Traders?.Where(t => t.Id == id).FirstOrDefault());
@@ -88,7 +83,7 @@ namespace TraderService.Controllers
             //return JsonSerializer.Deserialize<T>(json);
 
             Trader trader;
-            RepoResponse repoResponse = new() { Status = "Failure" }; ;
+            RepoResponse repoResponse = new() { OpStatus = RepoOperationStatus.Failure };
             //try
             //{
             //    trader = await _repo.FetchAsync(dbContext => dbContext.Traders?.Where(t => t.Id == id).FirstOrDefault());

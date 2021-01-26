@@ -17,7 +17,7 @@ namespace RepoLib
         public Task<RepoResponse> SaveAsync(Action<T> action) =>
             Task.Run(() =>
             {
-                RepoResponse repoResponse = new() { Status = "Success", Message = string.Empty };
+                RepoResponse repoResponse = new() { OpStatus = RepoOperationStatus.Success, Message = string.Empty };
                 using var dbContext = new T();
                 using var transaction = dbContext.Database.BeginTransaction();
                 try
@@ -28,7 +28,7 @@ namespace RepoLib
                 }
                 catch (Exception e) 
                 {
-                    repoResponse.Status = "Failure";
+                    repoResponse.OpStatus = RepoOperationStatus.Failure;
                     repoResponse.Message = e.Message;
                 }
 
