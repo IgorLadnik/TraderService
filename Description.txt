@@ -81,10 +81,11 @@ Further Development
 Technologies Used
 
 - ASP.MVC
-- GraphQL
+- GraphQL including solution to N + 1 problem
 - ORM EntityFrameworkCore
+- Repo pattern
 - In-memory service for integration testing
-
+- Synchronization for async/await methods
 
 
 
