@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using GraphQL;
 using GraphQL.Execution;
@@ -10,15 +11,14 @@ namespace GraphQlHelperLib
         object Value { get; set; }
     }
 
-    public static class ProvideUserContextEx 
+    public static class Extensions
     {
         private static IDictionary<string, object> GetCacheDictionary(this IProvideUserContext context) => context.UserContext;
 
         public static bool DoesCacheExist(this IProvideUserContext context, string key) =>
             GetCacheDictionary(context).ContainsKey(key);
 
-        
-        // Cache
+        #region Cache
 
         public static T GetCache<T>(this IProvideUserContext context, string key)
         {
@@ -38,8 +38,9 @@ namespace GraphQlHelperLib
             GetCacheDictionary(context)[key] = cacheObj;
         }
 
+        #endregion Cache
 
-        // User for authentication
+        #region User for authentication
 
         public static ClaimsPrincipal GetUser(this IProvideUserContext context)
         {
@@ -61,5 +62,37 @@ namespace GraphQlHelperLib
             var argNullable = context.Arguments[argName];
             return argNullable != null ? (T)argNullable : default;
         }
+
+        #endregion // User for authentication
+
+        #region Sort
+
+        public static object GetPropValue(this object t, string propName) =>
+            t.GetType().GetProperties().Where(p => p.Name.ToLower() == propName.ToLower()).FirstOrDefault().GetValue(t);
+
+        public static List<T> Sort<T>(this List<T> lstT ,string sortBy) 
+        {
+            if (string.IsNullOrEmpty(sortBy))
+                return lstT;
+
+            return sortBy[0] == '!'
+                    ? lstT.OrderByDescending(t => t.GetPropValue(sortBy.Substring(1))).ToList()
+                    : lstT.OrderBy(t => t.GetPropValue(sortBy)).ToList();
+
+        }
+
+        #endregion // Sort
+
+        #region Pagination
+
+        public static List<T> Page<T>(this List<T> lstT, int pageSize, int currentPage)
+        {
+            if (pageSize == 0)
+                return lstT;
+
+            return lstT.Skip(currentPage * pageSize).Take(pageSize).ToList();
+        }
+
+        #endregion // Pagination
     }
 }

@@ -22,43 +22,18 @@ namespace TraderModelLib.Queries
                 resolve: async context =>
                 {
                     var isDeleted = context.GetArgument<bool>("isDeleted");
-                    var sortBy = context.GetArgument<string>("sortBy");
-
                     var traders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => t.IsDeleted == isDeleted).ToList());
 
-                    if (!string.IsNullOrEmpty(sortBy))
-                    {
-                        switch (sortBy.ToLower())
-                        {
-                            case "birthdate":
-                            case "age":
-                                traders = traders.OrderBy(t => t.Birthdate).ToList();
-                                break;
-
-                            case "!birthdate":
-                            case "!age":
-                                traders = traders.OrderByDescending(t => t.Birthdate).ToList();
-                                break;
-
-                            case "email":
-                                traders = traders.OrderBy(t => t.Email).ToList();
-                                break;
-
-                            case "!email":
-                                traders = traders.OrderByDescending(t => t.Email).ToList();
-                                break;
-                        }
-                    }
+                    // Sort by a property
+                    var sortBy = context.GetArgument<string>("sortBy");
+                    traders = traders.Sort(sortBy);
 
                     context.SetCache<GqlCache>("traderIds", traders.Select(t => t.Id).ToList());
 
                     // Pagination
                     var pageSize = context.GetArgument<int>("pageSize");
-                    if (pageSize == 0)
-                        return traders;
-
                     var currentPage = context.GetArgument<int>("currentPage");
-                    return traders.Skip(currentPage * pageSize).Take(pageSize).ToList();
+                    return traders.Page(pageSize, currentPage);
                 });
         }
     }

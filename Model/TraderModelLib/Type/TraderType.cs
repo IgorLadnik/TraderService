@@ -25,8 +25,6 @@ namespace TraderModelLib.Type
 
             FieldAsync<ListGraphType<CryptocurrencyType>>("cryptocurrencies", resolve: async context =>
             {
-                IList<Cryptocurrency> cryptocurrencies;
-
                 Console.WriteLine("before 1");
 
                 await CacheDataFromRepo(async () =>

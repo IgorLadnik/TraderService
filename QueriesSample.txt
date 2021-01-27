@@ -1,19 +1,23 @@
 query AllTraders {
   allTradersQuery {
-    traders(sortBy: "!age") {
-      id
-      firstName
-      lastName
-      birthdate
-      email
-      password
-      isDeleted
-      cryptocurrencies {
+    traders(
+      isDeleted: false 
+      sortBy: "!Birthdate"
+    	pageSize: 2
+    	currentPage: 1) {
         id
-        currency
-        symbol
+        firstName
+        lastName
+        birthdate
+        email
+        password
+        isDeleted
+        cryptocurrencies {
+          id
+          currency
+          symbol
+        }
       }
-    }
   }
 }
 
