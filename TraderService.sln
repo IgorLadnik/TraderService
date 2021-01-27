@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncLockLib", "Libs\AsyncL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQlHelperLib", "Libs\GraphQlHelperLib\GraphQlHelperLib.csproj", "{5615829D-0852-4F1F-AAC9-1723888C5B78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{294F4761-B341-45A9-A35C-F9292C29E7E5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraderServiceTest", "Test\TraderServiceTest\TraderServiceTest.csproj", "{C547D894-F1A4-4AB4-960F-E43088B7EA5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{5615829D-0852-4F1F-AAC9-1723888C5B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5615829D-0852-4F1F-AAC9-1723888C5B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5615829D-0852-4F1F-AAC9-1723888C5B78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C547D894-F1A4-4AB4-960F-E43088B7EA5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C547D894-F1A4-4AB4-960F-E43088B7EA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C547D894-F1A4-4AB4-960F-E43088B7EA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C547D894-F1A4-4AB4-960F-E43088B7EA5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +67,7 @@ Global
 		{D085E087-1F84-4A12-8D96-BC222F8CFB5A} = {490F22C7-1739-4461-AE92-BB902D66AD30}
 		{F410DD93-B804-49E8-9B5F-2CDC39B53CA5} = {490F22C7-1739-4461-AE92-BB902D66AD30}
 		{5615829D-0852-4F1F-AAC9-1723888C5B78} = {490F22C7-1739-4461-AE92-BB902D66AD30}
+		{C547D894-F1A4-4AB4-960F-E43088B7EA5C} = {294F4761-B341-45A9-A35C-F9292C29E7E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {43F52B95-294F-4FE7-BEBF-6677E8F7A9CB}
