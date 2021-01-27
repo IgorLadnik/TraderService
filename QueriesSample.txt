@@ -1,5 +1,5 @@
-query AllTraders {
-  allTradersQuery {
+query Traders {
+  tradersQuery {
     traders(
       isDeleted: false 
       sortBy: "!Birthdate"

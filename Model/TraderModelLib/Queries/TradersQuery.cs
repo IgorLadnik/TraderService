@@ -8,9 +8,9 @@ using RepoInterfaceLib;
 
 namespace TraderModelLib.Queries
 {
-    public class AllTradersQuery : ObjectGraphType
+    public class TradersQuery : ObjectGraphType
     {
-        public AllTradersQuery(IRepo<TraderDbContext> repo)
+        public TradersQuery(IRepo<TraderDbContext> repo)
         {
             FieldAsync<ListGraphType<TraderType>>("traders",
                 arguments: new QueryArguments(

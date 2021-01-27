@@ -15,9 +15,9 @@ namespace TraderService.Tests
         const string gqlUri = "https://localhost:5001/gql";
 
         const string queryTempl = @"  
-            query AllTraders
+            query Traders
             {
-                allTradersQuery
+                tradersQuery
                 {
                     traders(sortBy: '!age') {
                         id

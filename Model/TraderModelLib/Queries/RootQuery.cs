@@ -6,7 +6,7 @@ namespace TraderModelLib.Queries
     {
         public RootQuery()
         {
-            Field<AllTradersQuery>("allTradersQuery", resolve: context => new { });
+            Field<TradersQuery>("tradersQuery", resolve: context => new { });
         }
     }
 }
