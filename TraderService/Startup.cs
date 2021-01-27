@@ -29,16 +29,12 @@ namespace TraderService
 
             services.AddControllers();
 
-            services.AddGraphQL(options =>
-            {
-                options.EnableMetrics = false;
-            })
-            .AddSystemTextJson();
+            services.AddCors();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TraderService", Version = "v1" });
-            });
+            services.AddGraphQL(options => options.EnableMetrics = false).AddSystemTextJson();
+
+            services.AddSwaggerGen(c => 
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TraderService", Version = "v1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +46,12 @@ namespace TraderService
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TraderService v1"));
             }
+
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
 
             app.UseGraphQL<ISchema>("/graphql");
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
