@@ -21,9 +21,8 @@ namespace TraderModelLib.Queries
                     ), 
                 resolve: async context =>
                 {
-                    var isDeletedNullable = context.Arguments["isDeleted"];
-                    var isDeleted = isDeletedNullable != null ? (bool)isDeletedNullable : false;
-                    var sortBy = (string)context.Arguments["sortBy"];
+                    var isDeleted = context.GetArgument<bool>("isDeleted");
+                    var sortBy = context.GetArgument<string>("sortBy");
 
                     var traders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => t.IsDeleted == isDeleted).ToList());
 
@@ -54,13 +53,11 @@ namespace TraderModelLib.Queries
                     context.SetCache<GqlCache>("traderIds", traders.Select(t => t.Id).ToList());
 
                     // Pagination
-                    var pageSizeNullable = context.Arguments["pageSize"];
-                    var pageSize = pageSizeNullable != null ? (int)pageSizeNullable : 0;
+                    var pageSize = context.GetArgument<int>("pageSize");
                     if (pageSize == 0)
                         return traders;
 
-                    var currentPageNullable = context.Arguments["currentPage"];
-                    var currentPage = currentPageNullable != null ? (int)currentPageNullable : 0;
+                    var currentPage = context.GetArgument<int>("currentPage");
                     return traders.Skip(currentPage * pageSize).Take(pageSize).ToList();
                 });
         }

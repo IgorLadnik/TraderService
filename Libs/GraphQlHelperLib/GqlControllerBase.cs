@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using GraphQL;
 using GraphQL.Types;
-//using AuthRolesLib;
 
 namespace GraphQlHelperLib
 {

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
+using GraphQL;
 using GraphQL.Execution;
-//using AuthRolesLib;
 
 namespace GraphQlHelperLib
 {
@@ -57,34 +56,10 @@ namespace GraphQlHelperLib
             GetCacheDictionary(context)["_User"] = user;
         }
 
-        public static bool GetIsAuthJwt(this IProvideUserContext context)
+        public static T GetArgument<T>(this IResolveFieldContext context, string argName)
         {
-            return GetCacheDictionary(context).TryGetValue("_IsAuthJwt", out object isAuthJwt)
-                        ? (bool)isAuthJwt
-                        : false;
+            var argNullable = context.Arguments[argName];
+            return argNullable != null ? (T)argNullable : default;
         }
-
-        public static void SetIsAuthJwt(this IProvideUserContext context, bool isAuthJwt)
-        {
-            GetCacheDictionary(context)["_IsAuthJwt"] = isAuthJwt;
-        }
-
-        //public static bool IsInRole(this IProvideUserContext context, params UserAuthRole[] userAuthTypes)
-        //{
-        //    var user = context.GetUser();
-        //    //var claims = user?.Claims;
-        //    if (user != null)
-        //        foreach (var userAuthType in userAuthTypes)
-        //            if (user.IsInRole($"{userAuthType}"))
-        //                return true;
-
-        //    return false;
-        //}
-
-        //public static void ValidateRole(this IProvideUserContext context, params UserAuthRole[] userAuthTypes)
-        //{
-        //   if (context.GetIsAuthJwt() && !context.IsInRole(userAuthTypes))
-        //        throw new UnauthorizedAccessException();
-        //}
     }
 }

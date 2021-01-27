@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using GraphQL;
 using GraphQL.NewtonsoftJson;
 using GraphQL.Types;
-//using AuthRolesLib;
 
 namespace GraphQlHelperLib
 {
@@ -23,27 +22,26 @@ namespace GraphQlHelperLib
             _isAuthJwt = configuration.GetValue<bool>("General:IsAuthJwt");
         }
 
-        public async Task<ExecutionResult> Process(GraphqlQuery query, ClaimsPrincipal user/*, params UserAuthRole[] roles*/)
+        public async Task<ExecutionResult> Process(GraphqlQuery query, ClaimsPrincipal user)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
 
-            //TEST
-            if (!query.IsIntrospection)
-            {
-            }
+            ////TEST
+            //if (!query.IsIntrospection)
+            //{
+            //}
 
             var executionOptions = new ExecutionOptions
             {
                 Query = query.Query,
                 Inputs = query.Variables.ToInputs(),
-                //ValidationRules = validationRules
             };
 
-            return await SetParamsAndExecute(executionOptions, user/*, roles*/);
+            return await SetParamsAndExecute(executionOptions, user);
         }
 
-        public async Task<ExecutionResult> Process(string query, ClaimsPrincipal user/*, params UserAuthRole[] roles*/)
+        public async Task<ExecutionResult> Process(string query, ClaimsPrincipal user)
         {
             if (string.IsNullOrEmpty(query))
                 throw new ArgumentNullException(nameof(query));
@@ -53,31 +51,14 @@ namespace GraphQlHelperLib
                 Query = query,
             };
 
-            return await SetParamsAndExecute(executionOptions, user/*, roles*/);
+            return await SetParamsAndExecute(executionOptions, user);
         }
 
-        private async Task<ExecutionResult> SetParamsAndExecute(ExecutionOptions executionOptions, ClaimsPrincipal user/*, params UserAuthRole[] roles*/)
+        private async Task<ExecutionResult> SetParamsAndExecute(ExecutionOptions executionOptions, ClaimsPrincipal user)
         {
             executionOptions.Schema = _schema;
-            executionOptions.SetIsAuthJwt(_isAuthJwt);
             executionOptions.SetUser(user);
-            return Validate(executionOptions/*, roles*/) ?? await _documentExecuter.ExecuteAsync(executionOptions);
-        }
-
-        private static ExecutionResult Validate(ExecutionOptions executionOptions/*, params UserAuthRole[] roles*/) 
-        {
-            //try
-            //{
-            //    executionOptions.ValidateRole(roles); // Auth. filter
-            //}
-            //catch (Exception e)
-            //{
-            //    ExecutionResult er = new() { Errors = new() };
-            //    er.Errors.Add(new ExecutionError(e.Message, e));
-            //    return er;
-            //}
-
-            return null;
+            return await _documentExecuter.ExecuteAsync(executionOptions);
         }
     }
 
