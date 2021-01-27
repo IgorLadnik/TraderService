@@ -80,12 +80,16 @@ Further Development
 
 Technologies Used
 
+- .NET 5
 - ASP.MVC
 - GraphQL including solution to N + 1 problem
 - ORM EntityFrameworkCore
 - Repo pattern
 - In-memory service for integration testing
 - Synchronization for async/await methods
+- Dependency injection
+- TLS
+
 
 
 
