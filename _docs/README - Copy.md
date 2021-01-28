@@ -1,2 +1,0 @@
-# TraderService
-TraderService test
