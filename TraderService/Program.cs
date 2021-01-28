@@ -1,11 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TraderService
 {
@@ -18,18 +12,6 @@ namespace TraderService
               .ConfigureWebHostDefaults(webBuilder =>
               {
                   webBuilder.UseStartup<Startup>();
-              })
-              .ConfigureLogging(logging =>
-              {
-                  // clear default logging providers
-                  logging.ClearProviders();
-
-                  // add built-in providers manually, as needed 
-                  logging.AddConsole();
-                  logging.AddDebug();
-                  logging.AddEventLog();
-                  logging.AddEventSourceLogger();
-                  //logging.AddTraceSource(sourceSwitchName);
               });
     }
 }

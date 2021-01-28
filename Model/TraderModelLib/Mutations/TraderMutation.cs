@@ -20,7 +20,7 @@ namespace TraderModelLib.Mutations
                 arguments: new QueryArguments(new QueryArgument<ListGraphType<TraderInputType>> { Name = "tradersInput" }),
                 resolve: async context =>
                 {
-                    logger.LogInformation("TraderMutation called");
+                    logger.LogTrace("TraderMutation called");
 
                     List<Trader> traders = new();
                     Dictionary<string, List<int>> dctTraderEmailToCurrencyId = new(); 
@@ -112,7 +112,7 @@ namespace TraderModelLib.Mutations
                         dbContext.Traders?.AddRange(tradersToInsert);
                         dbContext.T2Cs?.AddRange(t2csToInsert);
 
-                        logger.LogInformation("TraderMutation: changes saved");
+                        logger.LogTrace("TraderMutation: changes saved");
                     });
                 });
         }
