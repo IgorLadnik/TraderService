@@ -14,7 +14,6 @@ query Traders {
         isDeleted
         cryptocurrencies {
           id
-          currency
           symbol
         }
       }
@@ -27,6 +26,7 @@ query TraderByUniqueProperty {
       email: "llevy@trader.com"
     	id: 0) {
         id
+		isDeleted
         firstName
         lastName
         cryptocurrencies {

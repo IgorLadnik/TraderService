@@ -1,106 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RepoInterfaceLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+﻿using System;
 using System.Threading.Tasks;
-using TraderModelLib;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using GraphQlHelperLib;
+using GraphQL.Types;
+using GraphQL;
 using TraderModelLib.Data;
-using TraderModelLib.Models;
+using RepoInterfaceLib;
 
 namespace TraderService.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class TraderController : Controller
+    public class TraderController : GqlControllerBase
     {
         private readonly IRepo<TraderDbContext> _repo;
 
-        public TraderController(IRepo<TraderDbContext> repo)
+        public TraderController(
+            ISchema schema,
+            IDocumentExecuter documentExecuter,
+            IConfiguration configuration,
+            ILogger<ControllerBase> logger)
+                : base(schema, documentExecuter, configuration, logger)
         {
-            _repo = repo;
         }
 
         [HttpGet]
-        [Route("all")]
-        public async Task<IActionResult> GetAsync()
+        public IActionResult About() => Ok($"This is TraderService is called at {DateTime.Now}");
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                return Ok(await _repo.FetchAsync(dbContext => dbContext.Traders?.ToList()));
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.Message);
-            }
-        }
+            var query =
+                @"   
+                query TraderByUniqueProperty {
+                    traderByPropertyQuery {
+                        traderByUniqueProperty(id: /*id*/) {
+                            id
+                            isDeleted
+                            firstName
+                            lastName
+                            cryptocurrencies {
+                                id
+                                currency
+                                symbol
+                            }
+                        }
+                    }
+                }".Replace("/*id*/", $"{id}");
 
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetByIfAsync(int id)
-        {
-            try
-            {
-                return Ok(await _repo.FetchAsync(dbContext => dbContext.Traders?.Where(t => t.Id == id).FirstOrDefault()));
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("delete/{id}")]
-        public async Task<RepoResponse> DeleteAsync(int id)
-        {
-            Trader trader;
-            RepoResponse repoResponse = new() { OpStatus = RepoOperationStatus.Failure };
-            try
-            {
-                trader = await _repo.FetchAsync(dbContext => dbContext.Traders?.Where(t => t.Id == id).FirstOrDefault());
-            }
-            catch (Exception e)
-            {
-                repoResponse.Message = e.Message;
-                return repoResponse;
-            }
-
-            if (trader != null)
-            {
-                trader.IsDeleted = true;
-                repoResponse = await _repo.SaveAsync(dbContext => dbContext.Traders.Update(trader));
-            }
-
-            return repoResponse;
-        }
-
-        [HttpPost]
-        [Route("add")]
-        public RepoResponse Add([FromBody] JsonElement arg)
-        {
-            //var json = element.GetRawText();
-            //return JsonSerializer.Deserialize<T>(json);
-
-            Trader trader;
-            RepoResponse repoResponse = new() { OpStatus = RepoOperationStatus.Failure };
-            //try
-            //{
-            //    trader = await _repo.FetchAsync(dbContext => dbContext.Traders?.Where(t => t.Id == id).FirstOrDefault());
-            //}
-            //catch (Exception e)
-            //{
-            //    repoResponse.Message = e.Message;
-            //    return repoResponse;
-            //}
-
-            //if (trader != null)
-            //{
-            //    trader.IsDeleted = true;
-            //    repoResponse = await _repo.SaveAsync(dbContext => dbContext.Traders.Update(trader));
-            //}
-
-            return repoResponse;
+            return await ProcessQuery(query);
         }
     }
 }

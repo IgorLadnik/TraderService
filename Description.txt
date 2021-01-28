@@ -19,7 +19,10 @@ Similar approach was implemented in Node.js in my article [3].
 
 TraderService provides two controllers.
 GqlController processes all GraphQL requests, whereas
-AboutController processes "about" GET request and serves illustrative purposes.
+TraderController processes parameterless GET request responsing with some text, and
+another GET request with Trader id as a parameter.
+This request is internally processed as an ordinary GraphQL request with hardcoded query.
+TraderController serves just illustrative purpose.
 
 The service referred to several general purposes libraries (DLLs).
 They are located in directory Libs.

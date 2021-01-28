@@ -46,7 +46,11 @@ namespace TraderService
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TraderService v1"));
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "TraderService v1");
+                options.DefaultModelsExpandDepth(-1);
+            });
 
             app.UseCors(x => x
                 .AllowAnyMethod()
@@ -63,8 +67,6 @@ namespace TraderService
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
