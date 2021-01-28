@@ -12,15 +12,15 @@ using TraderModelLib.Type;
 
 namespace TraderModelLib.Mutations
 {
-    public class TraderMutation : ObjectGraphType
+    public class TradersMutation : ObjectGraphType
     {
-        public TraderMutation(IRepo<TraderDbContext> repo, ILogger<ControllerBase> logger)
+        public TradersMutation(IRepo<TraderDbContext> repo, ILogger<ControllerBase> logger)
         {
             FieldAsync<TraderOutputType>("createTraders",
                 arguments: new QueryArguments(new QueryArgument<ListGraphType<TraderInputType>> { Name = "tradersInput" }),
                 resolve: async context =>
                 {
-                    logger.LogTrace("TraderMutation called");
+                    logger.LogTrace("TradersMutation called");
 
                     List<Trader> traders = new();
                     Dictionary<string, List<int>> dctTraderEmailToCurrencyId = new(); 
@@ -112,7 +112,7 @@ namespace TraderModelLib.Mutations
                         dbContext.Traders?.AddRange(tradersToInsert);
                         dbContext.T2Cs?.AddRange(t2csToInsert);
 
-                        logger.LogTrace("TraderMutation: changes saved");
+                        logger.LogTrace("TradersMutation: changes saved");
                     });
                 });
         }

@@ -6,7 +6,7 @@ namespace TraderModelLib.Mutations
     {
         public RootMutation()
         {
-            Field<TraderMutation>("traderMutation", resolve: contect => new { });
+            Field<TradersMutation>("tradersMutation", resolve: contect => new { });
         }
     }
 }

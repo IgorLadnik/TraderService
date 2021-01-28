@@ -21,8 +21,8 @@ query Traders {
   }
 }
 
-mutation TraderMutation {
-  traderMutation {
+mutation TradersMutation {
+  tradersMutation {
     createTraders(
       tradersInput: [
       {
