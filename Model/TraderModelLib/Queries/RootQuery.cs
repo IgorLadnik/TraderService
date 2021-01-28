@@ -7,6 +7,7 @@ namespace TraderModelLib.Queries
         public RootQuery()
         {
             Field<TradersQuery>("tradersQuery", resolve: context => new { });
+            Field<TraderByUniquePropertyQuery>("traderByPropertyQuery", resolve: context => new { });
         }
     }
 }

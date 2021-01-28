@@ -33,10 +33,11 @@ namespace TraderModelLib
             // Queries
             services.AddTransient<RootQuery>();
             services.AddTransient<TradersQuery>();
+            services.AddTransient<TraderByUniquePropertyQuery>();
 
             // Mutations
-            services.AddTransient<TradersMutation>();
             services.AddTransient<RootMutation>();
+            services.AddTransient<TradersMutation>();
         } 
     }
 }

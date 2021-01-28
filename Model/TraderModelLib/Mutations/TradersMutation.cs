@@ -105,15 +105,20 @@ namespace TraderModelLib.Mutations
                     }
 
                     // Save changes with a transaction 
-                    return await repo.SaveAsync(dbContext =>
+                    var result = await repo.SaveAsync(dbContext =>
                     {
                         dbContext.T2Cs?.RemoveRange(t2csToRemove);
                         dbContext.Traders?.UpdateRange(tradersToUpdate);
                         dbContext.Traders?.AddRange(tradersToInsert);
                         dbContext.T2Cs?.AddRange(t2csToInsert);
-
-                        logger.LogTrace("TradersMutation: changes saved");
                     });
+
+                    if (result.IsOK)
+                        logger.LogTrace("TradersMutation: changes saved");
+                    else
+                        logger.LogError($"TradersMutation: ERROR. {result.Message}");
+
+                    return result;
                 });
         }
     }

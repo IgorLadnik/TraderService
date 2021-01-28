@@ -21,6 +21,23 @@ query Traders {
   }
 }
 
+query TraderByUniqueProperty {
+  traderByPropertyQuery {
+    traderByUniqueProperty(
+      email: "llevy@trader.com"
+    	id: 0) {
+        id
+        firstName
+        lastName
+        cryptocurrencies {
+          id
+          currency
+          symbol
+        }
+      }
+  }
+}
+  
 mutation TradersMutation {
   tradersMutation {
     createTraders(
