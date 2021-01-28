@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using GraphQL;
 using GraphQL.NewtonsoftJson;
@@ -13,24 +15,23 @@ namespace GraphQlHelperLib
     {
         protected readonly IDocumentExecuter _documentExecuter;
         protected readonly ISchema _schema;
-        protected readonly bool _isAuthJwt;
+        protected readonly ILogger<ControllerBase> _logger;
 
-        public GraphqlProcessor(ISchema schema, IDocumentExecuter documentExecuter, IConfiguration configuration)
+        public GraphqlProcessor(
+            ISchema schema, 
+            IDocumentExecuter documentExecuter, 
+            IConfiguration configuration, 
+            ILogger<ControllerBase> logger)
         {
             _schema = schema;
             _documentExecuter = documentExecuter;
-            _isAuthJwt = configuration.GetValue<bool>("General:IsAuthJwt");
+            _logger = logger;
         }
 
         public async Task<ExecutionResult> Process(GraphqlQuery query, ClaimsPrincipal user)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
-
-            ////TEST
-            //if (!query.IsIntrospection)
-            //{
-            //}
 
             var executionOptions = new ExecutionOptions
             {

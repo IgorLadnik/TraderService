@@ -73,7 +73,7 @@ Further Development
   Ids to tables records are generated from code - which is not acceptable in real world application, e.g.
   due to possible insertion to database by several instances of a service or by several services.
   
-- Authentication (I have already implemented JWT authentication for .NET 5 services).
+- Authentication (I have already implemented JSON Web Token (JWT) authentication for .NET 5 services).
 
 - Deployment with Docker.
 
@@ -82,13 +82,13 @@ Technologies Used
 
 - .NET 5
 - ASP.MVC
-- GraphQL including solution to N + 1 problem
+- GraphQL, including solution to N + 1 problem
 - ORM EntityFrameworkCore
 - Repo pattern
 - In-memory service for integration testing
 - Synchronization for async/await methods
 - Dependency injection
-- TLS
+- Transport Layer Security (TLS)
 
 
 

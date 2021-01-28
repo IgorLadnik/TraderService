@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using GraphQL.Types;
 using GraphQlHelperLib;
 using TraderModelLib.Data;
@@ -10,7 +12,7 @@ namespace TraderModelLib.Queries
 {
     public class TradersQuery : ObjectGraphType
     {
-        public TradersQuery(IRepo<TraderDbContext> repo)
+        public TradersQuery(IRepo<TraderDbContext> repo, ILogger<ControllerBase> logger)
         {
             FieldAsync<ListGraphType<TraderType>>("traders",
                 arguments: new QueryArguments(
@@ -21,6 +23,8 @@ namespace TraderModelLib.Queries
                     ), 
                 resolve: async context =>
                 {
+                    logger.LogTrace("TradersQuery called");
+
                     var isDeleted = context.GetArgument<bool>("isDeleted");
                     var traders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => t.IsDeleted == isDeleted).ToList());
 

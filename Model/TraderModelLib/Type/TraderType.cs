@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using GraphQL.Types;
 using GraphQlHelperLib;
 using RepoInterfaceLib;
@@ -13,7 +13,7 @@ namespace TraderModelLib.Type
 {
     public class TraderType : ObjectGraphTypeCached<Trader>
     {
-        public TraderType(IRepo<TraderDbContext> repo)
+        public TraderType(IRepo<TraderDbContext> repo, ILogger<ControllerBase> logger)
         {
             Field(p => p.Id);
             Field(p => p.FirstName);
@@ -25,14 +25,12 @@ namespace TraderModelLib.Type
 
             FieldAsync<ListGraphType<CryptocurrencyType>>("cryptocurrencies", resolve: async context =>
             {
-                Console.WriteLine("before 1");
-
                 await CacheDataFromRepo(async () =>
                 {
                     if (context.DoesCacheExist("cryptocurrencies"))
                         return;
 
-                    Console.WriteLine("** fetch 1");
+                    logger.LogTrace("Field 'cryptocurrencies': fetch from database");
 
                     var traderIds = context.GetCache<IList<int>>("traderIds");
                     var t2cs = await repo.FetchAsync(dbContext => dbContext.T2Cs.Where(a => traderIds.Contains(a.TraderId)).ToList());                 
@@ -42,7 +40,7 @@ namespace TraderModelLib.Type
                     context.SetCache<GqlCache>("cryptocurrencies", cryptocurrencies);
                 });
 
-                Console.WriteLine("after 1");
+                logger.LogTrace("Field 'cryptocurrencies': fetch from cache");
 
                 var t2cs1 = context.GetCache<IList<TraderToCurrency>>("t2cs");
                 var cryptocurrencies1 = context.GetCache<IList<Cryptocurrency>>("cryptocurrencies");

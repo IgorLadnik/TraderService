@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using GraphQL;
 using GraphQL.Types;
 using RepoInterfaceLib;
@@ -12,12 +14,14 @@ namespace TraderModelLib.Mutations
 {
     public class TraderMutation : ObjectGraphType
     {
-        public TraderMutation(IRepo<TraderDbContext> repo)
+        public TraderMutation(IRepo<TraderDbContext> repo, ILogger<ControllerBase> logger)
         {
             FieldAsync<TraderOutputType>("createTraders",
                 arguments: new QueryArguments(new QueryArgument<ListGraphType<TraderInputType>> { Name = "tradersInput" }),
                 resolve: async context =>
                 {
+                    logger.LogInformation("TraderMutation called");
+
                     List<Trader> traders = new();
                     Dictionary<string, List<int>> dctTraderEmailToCurrencyId = new(); 
                     
@@ -107,6 +111,8 @@ namespace TraderModelLib.Mutations
                         dbContext.Traders?.UpdateRange(tradersToUpdate);
                         dbContext.Traders?.AddRange(tradersToInsert);
                         dbContext.T2Cs?.AddRange(t2csToInsert);
+
+                        logger.LogInformation("TraderMutation: changes saved");
                     });
                 });
         }

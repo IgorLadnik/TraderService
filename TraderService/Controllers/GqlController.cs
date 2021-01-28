@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using GraphQL;
 using GraphQL.Types;
 using GraphQlHelperLib;
@@ -11,8 +12,12 @@ namespace TraderService.Controllers
     [ApiController]
     public class GqlController : GqlControllerBase
     {
-        public GqlController(ISchema schema, IDocumentExecuter documentExecuter, IConfiguration configuration)
-            : base(schema, documentExecuter, configuration)
+        public GqlController(
+            ISchema schema, 
+            IDocumentExecuter documentExecuter, 
+            IConfiguration configuration, 
+            ILogger<ControllerBase> logger)
+                : base(schema, documentExecuter, configuration, logger)
         {
         }
 
