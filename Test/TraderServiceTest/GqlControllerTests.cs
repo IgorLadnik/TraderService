@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 
 namespace TraderServiceTest
 {
@@ -32,8 +33,8 @@ namespace TraderServiceTest
             }";
 
         const string mutation =
-            @"mutation TraderMutation {
-                traderMutation {
+            @"mutation TradersMutation {
+                tradersMutation {
                     createTraders(
                       tradersInput: 
                       [
@@ -66,13 +67,34 @@ namespace TraderServiceTest
         [TestMethod]
         public async Task TestQuery()
         {
-            var result = await Execute(query);
+            var content = await Execute(query);
+
+            var jObject = JObject.Parse(content);
+            var t = jObject["tradersQuery"]["traders"][0];
+            Assert.IsNotNull(t);
+            Assert.IsTrue((int)t["id"] == 0);
+            Assert.IsTrue((string)t["email"] == "mcohen@trader.com");
+            t = t["cryptocurrencies"];
+            Assert.IsTrue((int)t[2]["id"] == 2);
+
+            t = jObject["tradersQuery"]["traders"][1];
+            Assert.IsNotNull(t);
+            Assert.IsTrue((int)t["id"] == 1);
+            Assert.IsTrue((string)t["email"] == "vpupkin@trader.com");
+            t = t["cryptocurrencies"];
+            Assert.IsTrue((int)t[0]["id"] == 0);
         }
 
         [TestMethod]
         public async Task TestMutation()
         {
             var result = await Execute(mutation);
+            var jObject = JObject.Parse(result);
+            var jResult = jObject["tradersMutation"]["createTraders"];
+            Assert.IsTrue((string)jResult["status"] == "Success");
+            Assert.IsTrue((string)jResult["message"] == string.Empty);
+
+            // In addition for complete test, newly inserted / updated data should by queried and checked here.
         }
     }
 }
