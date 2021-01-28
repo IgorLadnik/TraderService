@@ -104,13 +104,19 @@ namespace TraderModelLib.Mutations
                         t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList());
                     }
 
+                    // Should be unique TraderId - CurrencyId pairs to insert
+                    Dictionary<string, int> dctUnique = new();
+                    foreach (var t in t2csToInsert) 
+                        dctUnique[$"{t.TraderId}{t.CurrencyId}"] = t.Id;
+                    var t2csUniqueToInsert = t2csToInsert.Where(t => dctUnique.Values.Contains(t.Id)).ToList();
+
                     // Save changes with a transaction 
                     var result = await repo.SaveAsync(dbContext =>
                     {
                         dbContext.T2Cs?.RemoveRange(t2csToRemove);
                         dbContext.Traders?.UpdateRange(tradersToUpdate);
                         dbContext.Traders?.AddRange(tradersToInsert);
-                        dbContext.T2Cs?.AddRange(t2csToInsert);
+                        dbContext.T2Cs?.AddRange(t2csUniqueToInsert);
                     });
 
                     if (result.IsOK)

@@ -1,6 +1,7 @@
 # A Simple Trader Service
 
 
+
 ### Intro
 
 The service provides a very simple handling (base CRUD operations) of traders list. It is based on [GraphQL](https://en.wikipedia.org/wiki/GraphQL) technology. GraphQL allows to retrieve and submit stored data in a very ordered and at the same time flexible manner. It provides schema acting as a contract between client and server. The schema also defines retrieval procedure in the server.
@@ -18,9 +19,9 @@ The service provides a very simple handling (base CRUD operations) of traders li
 
 ##### Sequence of Actions
 
-1. Open solution *TraderService.sln* with Visual Studio 2019 (VS) with support for .NET 5 and build it.
+1. Open solution *TraderService.sln* with Visual Studio 2019 (VS) that supports .NET 5 and build it.
 
-2. SQL Server is used as database. For the sake of simplicity, Code First paradigm is adopted. Database *TradersDb* is automatically created when either the service or its integration tests run. Please adjust connection string (if required) in  *.\appsettings.json* service configuration file.
+2. SQL Server is used. For the sake of simplicity, Code First paradigm is adopted. Database *TradersDb* is automatically created when either the service or its integration tests run. Please adjust connection string (if required) in  *.\appsettings.json* service configuration file.
 
 3. Run *TraderService*.
     3.1 It may be carried out from VS either as a service or under IIS Express.
