@@ -179,7 +179,7 @@ Mutation *TradersMutation* allows user to create new traders and/or update exist
 
 ### Testing
 
-Integration tests are placed in project *TraderServiceTest* (directory .\Test) in class [*GqlControllerTests*]().  Well-known NUnit package is used for testing. In-memory service is used for integration tests (please see *IntegrationTest* base class for tests). This approach is considerably reduces efforts to develop integration tests. Tests may be run out-of-the-box since they create and initially fill database.
+Integration tests are placed in project *TraderServiceTest* (directory .\Test) in class [*GqlControllerTests*]().  In-memory service is used for integration tests (please see *IntegrationTest* base class for tests). This approach is considerably reduces efforts to develop integration tests. Tests may be run out-of-the-box since they create and initially fill database.
 
 
 
