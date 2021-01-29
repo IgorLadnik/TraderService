@@ -36,7 +36,7 @@ The service provides a very simple handling (basic CRUD operations) of traders l
     In this case browser should be started manually navigating on https://localhost:5001/playground when the service is already running.
     In *Playground* Web page you may see GraphQL schema and play with different queries and mutations. Some predefined queries and mutation may be copied from *.\QueriesSample.txt* file).
 
-​    ![playground](.\_docs\playground.png)
+​    ![playground](playground.png)
 
 Fig. 1. Playground Web page.
 
@@ -47,7 +47,7 @@ Fig. 1. Playground Web page.
 
 
 
-![postman](.\_docs\postman.png)
+![postman](postman.png)
 
 Fig. 2. Postman.
 
@@ -57,7 +57,7 @@ Fig. 2. Postman.
 
 
 
-![swagger](.\_docs\swagger.png)
+![swagger](swagger.png)
 
 Fig.3. Swagger Web page.
 
@@ -67,7 +67,7 @@ In Postman press *Code* link in the upper-right corner, copy query to Swagger's 
 
 
 
-![postman-code](.\_docs\postman-code.png)
+![postman-code](postman-code.png)
 
 Fig. 4. Code textbox in Postman
 
