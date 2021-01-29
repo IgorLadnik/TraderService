@@ -99,7 +99,7 @@ query Traders {
         id
         firstName
         lastName
- 		birthdate
+        birthdate
         avatar
         email
         password
@@ -128,7 +128,7 @@ query TraderByUniqueProperty {
   traderByPropertyQuery {
     traderByUniqueProperty(
       email: "llevy@trader.com"
-    	id: 0) {
+      id: 0) {
         id
         isDeleted
         firstName
@@ -152,29 +152,31 @@ Query *TraderByUniqueProperty* returns a single trader by its unique parameter -
 mutation TradersMutation {
   tradersMutation {
     createTraders(
-      tradersInput: [
-      {
-        firstName: "Lior"
-        lastName: "Levy"
-        birthdate: "1950-01-01"
-        avatar: "www.trader/member/images/llevy.png",
-        email: "llevy@trader.com"
-        password: "lll"    
-        isDeleted: false
-        cryptocurrencies: [{ id: 1 }{ id: 3 }]
-      }
-      {
-        firstName: "Ann"
-        lastName: "Linders"
-        birthdate: "1980-01-01"
-        email: "annl@trader.com"
-        avatar: "www.trader/member/images/annl.png",
-        password: "lll"    
-        isDeleted: false
-        cryptocurrencies: [{ id: 1 }{ id: 3 }]
-   	  }
+      tradersInput: 
+      [
+        {
+          firstName: "Lior"
+          lastName: "Levy"
+          birthdate: "1950-01-01"
+          avatar: "www.trader/member/images/llevy.png",
+          email: "llevy@trader.com"
+          password: "lll"    
+          isDeleted: false
+          cryptocurrencies: [{ id: 1 }{ id: 3 }]
+        }
+        {
+          firstName: "Ann"
+          lastName: "Linders"
+          birthdate: "1980-01-01"
+          email: "annl@trader.com"
+          avatar: "www.trader/member/images/annl.png",
+          password: "lll"    
+          isDeleted: false
+          cryptocurrencies: [{ id: 1 }{ id: 3 }]
+   	    }
       ]
-    ) {
+    ) 
+    {
       status
       message
     }
