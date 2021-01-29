@@ -85,6 +85,10 @@ Fig. 4. Code textbox in Postman
 
 These are example of queries and mutation for our solution. You may see their description in *Playground* DOCS pane.
 
+
+
+
+```
 query Traders {
   tradersQuery {
     traders(
@@ -107,6 +111,8 @@ query Traders {
       }
   }
 }
+```
+
 
 The above *Traders* query returns all traders met the conditions defined by four non-mandatory arguments.
 
@@ -117,7 +123,7 @@ The above *Traders* query returns all traders met the conditions defined by four
 *pageSize* and *currentPage* are used for pagination. Default value for both is *0*, meaning no pagination. 
 
 
-
+```
 query TraderByUniqueProperty {
   traderByPropertyQuery {
     traderByUniqueProperty(
@@ -136,11 +142,13 @@ query TraderByUniqueProperty {
       }
   }
 }
+```
+
 
 Query *TraderByUniqueProperty* returns a single trader by its unique parameter - either email (preferred) or *id*.
 
 
-
+```
 mutation TradersMutation {
   tradersMutation {
     createTraders(
@@ -172,6 +180,7 @@ mutation TradersMutation {
     }
   }
 }
+```
 
 Mutation *TradersMutation* allows user to create new traders and/or update existing ones.
 
