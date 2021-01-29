@@ -42,7 +42,7 @@ namespace TraderServiceTest
                     lastName: 'Levy'
                     birthdate: '1950-01-01'
                     avatar: 'www.trader/member/images/llevy.png',
-                    email: 'llevy @trader.com'
+                    email: 'llevy@trader.com'
                     password: 'lll'
                     isDeleted: false
                     cryptocurrencies: [{ id: 1 }{ id: 2 }]
@@ -51,7 +51,7 @@ namespace TraderServiceTest
                     firstName: 'Ann'
                     lastName: 'Linders'
                     birthdate: '1980-01-01'
-                    email: 'annl @trader.com'
+                    email: 'annl@trader.com'
                     avatar: 'www.trader/member/images/annl.png',
                     password: 'lll'
                     isDeleted: false
