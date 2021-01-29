@@ -95,7 +95,7 @@ query Traders {
       isDeleted: false 
       sortBy: "!Birthdate"
       pageSize: 2
-      currentPage: 1) {
+      currentPage: 0) {
         id
         firstName
         lastName
