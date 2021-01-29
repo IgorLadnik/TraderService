@@ -173,7 +173,7 @@ mutation TradersMutation {
           password: "lll"    
           isDeleted: false
           cryptocurrencies: [{ id: 1 }{ id: 3 }]
-   	    }
+        }
       ]
     ) 
     {
