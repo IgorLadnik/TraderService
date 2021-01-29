@@ -34,34 +34,36 @@ namespace TraderServiceTest
 
         const string mutation =
             @"mutation TradersMutation {
-                tradersMutation {
-                    createTraders(
-                      tradersInput: 
-                      [
-                        {
-                            firstName: 'Lior'
-                            lastName: 'Levy'
-                            birthdate: '1950-01-01'
-                            email: 'llevy@trader.com'
-                            password: 'lll'
-                            isDeleted: false
-                            cryptocurrencies: [{ id: 0 }{ id: 1 }]
-   	                    }
-                        {
-                            firstName: 'Ann'
-                            lastName: 'Linders'
-                            birthdate: '1980-01-01'
-                            email: 'annl@trader.com'
-                            password: 'lll'
-                            isDeleted: false
-                            cryptocurrencies: [{ id: 0 }{ id: 0 }]
-   	                    }
-                      ]
-                    ) {
-                        status
-                        message
-                    }
+              tradersMutation {
+                createTraders(
+                  tradersInput: [
+                  {
+                    firstName: 'Lior'
+                    lastName: 'Levy'
+                    birthdate: '1950-01-01'
+                    avatar: 'www.trader/member/images/llevy.png',
+                    email: 'llevy @trader.com'
+                    password: 'lll'
+                    isDeleted: false
+                    cryptocurrencies: [{ id: 1 }{ id: 2 }]
+   	              }
+                  {
+                    firstName: 'Ann'
+                    lastName: 'Linders'
+                    birthdate: '1980-01-01'
+                    email: 'annl @trader.com'
+                    avatar: 'www.trader/member/images/annl.png',
+                    password: 'lll'
+                    isDeleted: false
+                    cryptocurrencies:[{ id: 1 }
+                { id: 1 }]
+   	              }
+                  ]
+                ) {
+                status
+                message
                 }
+              }
             }";
 
         [TestMethod]
@@ -72,17 +74,17 @@ namespace TraderServiceTest
             var jObject = JObject.Parse(content);
             var t = jObject["tradersQuery"]["traders"][0];
             Assert.IsNotNull(t);
-            Assert.IsTrue((int)t["id"] == 0);
+            Assert.IsTrue((int)t["id"] == -1);
             Assert.IsTrue((string)t["email"] == "mcohen@trader.com");
             t = t["cryptocurrencies"];
-            Assert.IsTrue((int)t[2]["id"] == 2);
+            Assert.IsTrue((int)t[2]["id"] == 3);
 
             t = jObject["tradersQuery"]["traders"][1];
             Assert.IsNotNull(t);
-            Assert.IsTrue((int)t["id"] == 1);
+            Assert.IsTrue((int)t["id"] == -2);
             Assert.IsTrue((string)t["email"] == "vpupkin@trader.com");
             t = t["cryptocurrencies"];
-            Assert.IsTrue((int)t[0]["id"] == 0);
+            Assert.IsTrue((int)t[0]["id"] == 1);
         }
 
         [TestMethod]

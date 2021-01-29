@@ -136,7 +136,7 @@ query TraderByUniqueProperty {
   }
 }
 
-TraderByUniqueProperty query returns a single trader by his unique parameter - either email (preferred) or *id*
+Query *TraderByUniqueProperty* returns a single trader by his unique parameter - either email (preferred) or *id*
 
 
 
@@ -152,8 +152,8 @@ mutation TradersMutation {
         email: "llevy@trader.com"
         password: "lll"    
         isDeleted: false
-        cryptocurrencies: [{ id: 0 }{ id: 1 }]
-   	  }
+        cryptocurrencies: [{ id: 1 }{ id: 3 }]
+      }
       {
         firstName: "Ann"
         lastName: "Linders"
@@ -162,7 +162,7 @@ mutation TradersMutation {
         avatar: "www.trader/member/images/annl.png",
         password: "lll"    
         isDeleted: false
-        cryptocurrencies: [{ id: 0 }{ id: 2 }]
+        cryptocurrencies: [{ id: 1 }{ id: 3 }]
    	  }
       ]
     ) {
@@ -174,4 +174,5 @@ mutation TradersMutation {
 
 
 
-Mutation TradersMutation allows user to create new traders and/or update existing ones.
+Mutation *TradersMutation* allows user to create new traders and/or update existing ones.
+

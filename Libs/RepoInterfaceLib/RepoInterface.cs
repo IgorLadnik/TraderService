@@ -7,6 +7,10 @@ namespace RepoInterfaceLib
     {
         Task<R> FetchAsync<R>(Func<TStorateContext, R> func);
 
+        Task BeginTransactionAsync();
+
+        Task<RepoResponse> CommitAsync();
+
         Task<RepoResponse> SaveAsync(Action<TStorateContext> action);
     }
 }
