@@ -54,6 +54,7 @@ namespace TraderModelLib.Mutations
                                         case "firstName": trader.FirstName = (string)v; break;
                                         case "lastName": trader.LastName = (string)v; break;
                                         case "birthdate": trader.Birthdate = (DateTime)v; break;
+                                        case "avatar": trader.Avatar = ((string)v)?.ToLower(); break;
                                         case "email": trader.Email = ((string)v)?.ToLower(); break;
                                         case "password": trader.Password = (string)v; break;
                                         case "isDeleted": trader.IsDeleted = (bool)v; break;

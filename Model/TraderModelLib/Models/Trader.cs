@@ -20,6 +20,9 @@ namespace TraderModelLib.Models
         public string LastName { get; set; }
 
         [Required]
+        public string Avatar { get; set; }
+
+        [Required]
         public DateTime Birthdate { get; set; }
 
         [Required]

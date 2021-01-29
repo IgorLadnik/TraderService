@@ -31,8 +31,28 @@ namespace TraderModelLib.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Trader>().HasData(
-                new { Id = 0, FirstName = "Moshe", LastName = "Cohen", Birthdate = new DateTime(1991, 1, 1), Email = "mcohen@trader.com", IsDeleted = false, Password = "mmm" },
-                new { Id = 1, FirstName = "Vasya", LastName = "Pupkin", Birthdate = new DateTime(1990, 1, 1),  Email = "vpupkin@trader.com".ToLower(), IsDeleted = false, Password = "vvv" }
+                new 
+                { 
+                    Id = 0, 
+                    FirstName = "Moshe", 
+                    LastName = "Cohen", 
+                    Birthdate = new DateTime(1991, 1, 1), 
+                    Email = "mcohen@trader.com",
+                    Password = "mmm",
+                    Avatar = "www.trader/member/images/mcohen.png",
+                    IsDeleted = false
+                },
+                new 
+                { 
+                    Id = 1, 
+                    FirstName = "Vasya", 
+                    LastName = "Pupkin", 
+                    Birthdate = new DateTime(1990, 1, 1),  
+                    Email = "vpupkin@trader.com".ToLower(),
+                    Password = "vvv",
+                    Avatar = "www.trader/member/images/vpupkin.png",
+                    IsDeleted = false 
+                }
             );
 
             modelBuilder.Entity<Cryptocurrency>().HasData(

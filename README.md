@@ -36,6 +36,8 @@ The service provides a very simple handling (base CRUD operations) of traders li
 
   ![playground](C:\prj\TraderService\_docs\playground.png)
 
+Fig. 1. Playground
+
 
 
 4. *Playground* application uses middleware to run (it is mostly used during development, but in this project available in all versions). It does not call *GqlController* that is used by clients in production. To work with *GqlController* you may use Postman application.
@@ -46,6 +48,8 @@ The service provides a very simple handling (base CRUD operations) of traders li
 
 ![postman](C:\prj\TraderService\_docs\postman.png)
 
+Fig. 2. Postman
+
 
 
 5. You may also use *OpenApi* (a.k.a. *Swagger*): browse to https://localhost:5001/swagger and activate POST /Gql .
@@ -53,6 +57,8 @@ The service provides a very simple handling (base CRUD operations) of traders li
 
 
 ![swagger](C:\prj\TraderService\_docs\swagger.png)
+
+Fig.3. Swagger
 
 
 
@@ -62,6 +68,8 @@ In Postman press *Code* link in the upper-right corner, copy query to Swagger's 
 
 ![postman-code](C:\prj\TraderService\_docs\postman-code.png)
 
+Fig. 4. Code textbox in Postman
+
 
 
 6. In all cases you may use unsafe call to http://localhost:5000 (allowed for illustration and debugging).
@@ -69,3 +77,101 @@ In Postman press *Code* link in the upper-right corner, copy query to Swagger's 
 7. Integration tests may be found in project *TraderServiceTest* in directory *.\Test* .
 
    
+
+### Queries and Mutations with Playground
+
+*Playground* is a Web application that may be activating by GraphQL libraries middleware (in this case NuGet package *GraphQL.Server.Ui.Playground* is used). It offers convenient and intuitive way to  define, document and execute GraphQL queries and mutations. *Playground* provides intellisense and error handling. It also shows GrpahQL schema and all queries and mutation available for a given task. Screenshot of *Playground* is depicted in Fig. 1 above.   
+
+These are example of queries and mutation for our solution. You may see them in *Playground* DOCS pane.
+
+query Traders {
+  tradersQuery {
+    traders(
+      isDeleted: false 
+      sortBy: "!Birthdate"
+    	pageSize: 2
+    	currentPage: 1) {
+        id
+        firstName
+        lastName
+        birthdate
+		avatar
+        email
+        password
+        isDeleted
+        cryptocurrencies {
+          id
+          symbol
+        }
+      }
+  }
+}
+
+The above *Traders* query returns all traders met the conditions defined by four non-mandatory arguments.
+
+*isDeleted* filters active / deleted traders. Default value is *false*. 
+
+*sortBy* sorts the traders by any of their properties (non-case-sensitive), e .g. *birthdate*. If exclamation sign precedes the property name then sorting will be performed in descending order.  No sorting by default.
+
+*pageSize* and *currentPage* are used for pagination. Default value for both is *0*, meaning no pagination. 
+
+
+
+query TraderByUniqueProperty {
+  traderByPropertyQuery {
+    traderByUniqueProperty(
+      email: "llevy@trader.com"
+    	id: 0) {
+        id
+		isDeleted
+        firstName
+        lastName
+		avatar
+        cryptocurrencies {
+          id
+          currency
+          symbol
+        }
+      }
+  }
+}
+
+TraderByUniqueProperty query returns a single trader by his unique parameter - either email (preferred) or *id*
+
+
+
+mutation TradersMutation {
+  tradersMutation {
+    createTraders(
+      tradersInput: [
+      {
+        firstName: "Lior"
+        lastName: "Levy"
+        birthdate: "1950-01-01"
+        avatar: "www.trader/member/images/llevy.png",
+        email: "llevy@trader.com"
+        password: "lll"    
+        isDeleted: false
+        cryptocurrencies: [{ id: 0 }{ id: 1 }]
+   	  }
+      {
+        firstName: "Ann"
+        lastName: "Linders"
+        birthdate: "1980-01-01"
+        email: "annl@trader.com"
+        avatar: "www.trader/member/images/annl.png",
+        password: "lll"    
+        isDeleted: false
+        cryptocurrencies: [{ id: 0 }{ id: 2 }]
+   	  }
+      ]
+    ) {
+      status
+      message
+    }
+  }
+}
+
+
+
+Mutation TradersMutation allows user to create new traders and/or update existing ones.

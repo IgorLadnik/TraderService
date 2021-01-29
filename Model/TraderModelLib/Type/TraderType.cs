@@ -19,6 +19,7 @@ namespace TraderModelLib.Type
             Field(p => p.FirstName);
             Field(p => p.LastName);
             Field(p => p.Birthdate);
+            Field(p => p.Avatar);
             Field(p => p.Email);
             Field(p => p.Password);
             Field(p => p.IsDeleted);
