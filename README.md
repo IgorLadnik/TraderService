@@ -137,7 +137,7 @@ query TraderByUniqueProperty {
   }
 }
 
-Query *TraderByUniqueProperty* returns a single trader by his unique parameter - either email (preferred) or *id*
+Query *TraderByUniqueProperty* returns a single trader by its unique parameter - either email (preferred) or *id*.
 
 
 

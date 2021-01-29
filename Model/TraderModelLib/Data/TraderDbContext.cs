@@ -7,11 +7,6 @@ namespace TraderModelLib.Data
 {
     public class TraderDbContext : DbContext
     {
-        private static int _currentId = 100;
-
-        public static int CurrentId => Interlocked.Increment(ref _currentId);
-
-
         public static string ConnectionString { private get; set; }
 
         public TraderDbContext()
