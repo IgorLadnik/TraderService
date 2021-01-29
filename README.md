@@ -36,7 +36,7 @@ The service provides a very simple handling (basic CRUD operations) of traders l
     In this case browser should be started manually navigating on https://localhost:5001/playground when the service is already running.
     In *Playground* Web page you may see GraphQL schema and play with different queries and mutations. Some predefined queries and mutation may be copied from *.\QueriesSample.txt* file).
 
-​    ![playground](playground.png)
+​    ![playground](_docs/playground.png)
 
 Fig. 1. Playground Web page.
 
@@ -47,7 +47,7 @@ Fig. 1. Playground Web page.
 
 
 
-![postman](postman.png)
+![postman](_docs/postman.png)
 
 Fig. 2. Postman.
 
@@ -57,7 +57,7 @@ Fig. 2. Postman.
 
 
 
-![swagger](swagger.png)
+![swagger](_docs/swagger.png)
 
 Fig.3. Swagger Web page.
 
@@ -67,7 +67,7 @@ In Postman press *Code* link in the upper-right corner, copy query to Swagger's 
 
 
 
-![postman-code](postman-code.png)
+![postman-code](_docs/postman-code.png)
 
 Fig. 4. Code textbox in Postman
 
@@ -94,13 +94,13 @@ query Traders {
     traders(
       isDeleted: false 
       sortBy: "!Birthdate"
-    	pageSize: 2
-    	currentPage: 1) {
+      pageSize: 2
+      currentPage: 1) {
         id
         firstName
         lastName
-        birthdate
-		avatar
+ 		birthdate
+        avatar
         email
         password
         isDeleted
@@ -130,10 +130,10 @@ query TraderByUniqueProperty {
       email: "llevy@trader.com"
     	id: 0) {
         id
-		isDeleted
+        isDeleted
         firstName
         lastName
-		avatar
+        avatar
         cryptocurrencies {
           id
           currency
@@ -188,7 +188,7 @@ Mutation *TradersMutation* allows user to create new traders and/or update exist
 
 ### Testing
 
-Integration tests are placed in project *TraderServiceTest* (directory .\Test) in class [*GqlControllerTests*]().  In-memory service is used for integration tests (please see *IntegrationTest* base class for tests). This approach is considerably reduces efforts to develop integration tests. Tests may be run out-of-the-box since they create and initially fill database.
+Integration tests are placed in project *TraderServiceTest* (directory .\Test) in class *GqlControllerTests*.  In-memory service is used for integration tests (please see *IntegrationTest* base class for tests). This approach is considerably reduces efforts to develop integration tests. Tests may be run out-of-the-box since they create and initially fill database.
 
 
 
