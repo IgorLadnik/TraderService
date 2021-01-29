@@ -95,39 +95,47 @@ namespace TraderModelLib.Mutations
                             tradersToInsert.Add(trader);
                     }
 
+                    // Begin transaction
                     await repo.BeginTransactionAsync();
 
-                    var res = await repo.SaveAsync(dbContext =>
+                    // Save traders
+                    var result = await repo.SaveAsync(dbContext =>
                     {
                         dbContext.Traders?.UpdateRange(tradersToUpdate);
                         dbContext.Traders?.AddRange(tradersToInsert);
                     });
 
-                    if (!res.IsOK)
-                        return res;
+                    if (!result.IsOK)
+                    {
+                        logger.LogError($"TradersMutation: ERROR. {result.Message}");
+                        return result;
+                    }
 
-                    existingTraders = await repo.FetchAsync(dbContext => dbContext.Traders.Where(t => emails.Contains(t.Email)).ToList());
+                    // Special FetchInTransactionAsync() method to fetch data
+                    existingTraders = await repo.FetchInTransactionAsync(dbContext => dbContext.Traders.Where(t => emails.Contains(t.Email)).ToList());
                     foreach (var trader in existingTraders)
                         foreach (var email in dctTraderEmailToCurrencyId.Keys)
                             if (email == trader.Email)
                                 foreach (var currencyId in dctTraderEmailToCurrencyId[email])
                                     t2csToInsert.Add(new TraderToCurrency { TraderId = trader.Id, CurrencyId = currencyId });
 
-                    t2csToRemove = await repo.FetchAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList());
+                    // Special FetchInTransactionAsync() method to fetch data
+                    t2csToRemove = await repo.FetchInTransactionAsync(dbContext => dbContext.T2Cs?.Where(t => traderIds.Contains(t.TraderId)).ToList());
                     
-                    // Should be unique TraderId - CurrencyId pairs to insert
+                    // Ensure unique TraderId - CurrencyId pairs to insert
                     Dictionary<string, TraderToCurrency> dctUnique = new();
                     foreach (var t in t2csToInsert) 
                         dctUnique[$"{t.TraderId}{t.CurrencyId}"] = new TraderToCurrency { TraderId = t.TraderId, CurrencyId = t.CurrencyId };
                     var t2csUniqueToInsert = dctUnique.Values.ToList();
 
-                    // Save changes with a transaction 
-                    var result = await repo.SaveAsync(dbContext =>
+                    // Save TraderToCurrncy
+                    result = await repo.SaveAsync(dbContext =>
                     {
                         dbContext.T2Cs?.RemoveRange(t2csToRemove);
                         dbContext.T2Cs?.AddRange(t2csUniqueToInsert);
                     });
 
+                    // Commit / Rollback 
                     if (result.IsOK)
                         result = await repo.CommitAsync();
 

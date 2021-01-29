@@ -18,6 +18,12 @@ namespace RepoLib
                 return func(dbContext);
             });
 
+        public Task<R> FetchInTransactionAsync<R>(Func<T, R> func) =>
+            Task.Run(() =>
+            {
+                return func(_dbContext);
+            });
+
         public Task BeginTransactionAsync() =>
             Task.Run(() =>
             {

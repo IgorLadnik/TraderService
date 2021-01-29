@@ -9,8 +9,10 @@ namespace RepoInterfaceLib
 
         Task BeginTransactionAsync();
 
-        Task<RepoResponse> CommitAsync();
+        Task<R> FetchInTransactionAsync<R>(Func<TStorateContext, R> func);
 
         Task<RepoResponse> SaveAsync(Action<TStorateContext> action);
+
+        Task<RepoResponse> CommitAsync();
     }
 }
