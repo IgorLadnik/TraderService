@@ -24,27 +24,27 @@ namespace TraderModelLib.Type
             Field(p => p.Password);
             Field(p => p.IsDeleted);
 
-            FieldAsync<ListGraphType<CryptocurrencyType>>("cryptocurrencies", resolve: async context =>
+            var propName = "cryptocurrencies";
+            FieldAsync<ListGraphType<CryptocurrencyType>>(propName, resolve: async context =>
             {
-                await CacheDataFromRepo(async () =>
-                {
-                    if (context.DoesCacheExist("cryptocurrencies"))
-                        return;
+                await CacheDataFromRepo(
+                    () => !context.DoesCacheExist(propName),
+                    async () =>
+                    {
+                        logger.LogTrace($"Field '{propName}': fetch from database");
 
-                    logger.LogTrace("Field 'cryptocurrencies': fetch from database");
+                        var traderIds = context.GetCache<IList<int>>("traderIds");
+                        var t2cs = await repo.FetchAsync(dbContext => dbContext.T2Cs.Where(a => traderIds.Contains(a.TraderId)).ToList());                 
+                        var currencyIds = t2cs.Select(t => t.CurrencyId).ToList();
+                        var cryptocurrencies = await repo.FetchAsync(dbContext => dbContext.Cryptocurrencies.Where(c => currencyIds.Contains(c.Id)).ToList());
+                        context.SetCache<GqlCache>("t2cs", t2cs);
+                        context.SetCache<GqlCache>(propName, cryptocurrencies);
+                    });
 
-                    var traderIds = context.GetCache<IList<int>>("traderIds");
-                    var t2cs = await repo.FetchAsync(dbContext => dbContext.T2Cs.Where(a => traderIds.Contains(a.TraderId)).ToList());                 
-                    var currencyIds = t2cs.Select(t => t.CurrencyId).ToList();
-                    var cryptocurrencies = await repo.FetchAsync(dbContext => dbContext.Cryptocurrencies.Where(c => currencyIds.Contains(c.Id)).ToList());
-                    context.SetCache<GqlCache>("t2cs", t2cs);
-                    context.SetCache<GqlCache>("cryptocurrencies", cryptocurrencies);
-                });
-
-                logger.LogTrace("Field 'cryptocurrencies': fetch from cache");
+                logger.LogTrace($"Field '{propName}': fetch from cache");
 
                 var t2cs1 = context.GetCache<IList<TraderToCurrency>>("t2cs");
-                var cryptocurrencies1 = context.GetCache<IList<Cryptocurrency>>("cryptocurrencies");
+                var cryptocurrencies1 = context.GetCache<IList<Cryptocurrency>>(propName);
                 var currencyIds = t2cs1.Where(tc => tc.TraderId == context.Source.Id).Select(a => a.CurrencyId).ToList();
                 return cryptocurrencies1.Where(c => currencyIds.Contains(c.Id)).ToList();
             });
