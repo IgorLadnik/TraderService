@@ -15,8 +15,6 @@ namespace TraderService.Controllers
     [ApiController]
     public class TraderController : GqlControllerBase
     {
-        private readonly IRepo<TraderDbContext> _repo;
-
         public TraderController(
             ISchema schema,
             IDocumentExecuter documentExecuter,
@@ -27,7 +25,7 @@ namespace TraderService.Controllers
         }
 
         [HttpGet]
-        public IActionResult About() => Ok($"This is TraderService is called at {DateTime.Now}");
+        public IActionResult About() => Ok($"TraderService was called at {DateTime.Now}");
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
