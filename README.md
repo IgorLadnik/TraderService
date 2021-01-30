@@ -34,7 +34,7 @@ The service provides a very simple handling (basic CRUD operations) of traders l
     Browser with *Playground* Web UI application for GraphQL starts automatically.
     3.2 Alternatively, the service may be started by activating *.\TraderService\TraderService\bin\Debug {or Release}\net5.0\TraderService.exe* .
     In this case browser should be started manually navigating on https://localhost:5001/playground when the service is already running.
-    In *Playground* Web page you may see GraphQL schema and play with different queries and mutations. Some predefined queries and mutation may be copied from *.\QueriesSample.txt* file).
+    In *Playground* Web page you may see GraphQL schema and play with different queries and mutations. Some predefined queries and mutation may be copied from *Queries and Mutations with Playground* chapter of this document.
 
 ​    ![playground](_docs/playground.png)
 
@@ -83,7 +83,7 @@ Fig. 4. Code textbox in Postman
 
 *Playground* is a Web application that may be activating by GraphQL libraries middleware out-of-the-box (in this case NuGet package *GraphQL.Server.Ui.Playground* is used). It offers convenient and intuitive way to  define, document and execute GraphQL queries and mutations. *Playground* provides intellisense and error handling. It also shows GrpahQL schema and all queries and mutation available for a given task. Screenshot of *Playground* is depicted in Fig. 1 above.   
 
-These are example of queries and mutation for our solution. You may see their description in *Playground* DOCS pane.
+These are examples of queries and mutation for our solution. You may see their description in *Playground* DOCS pane.
 
 
 
@@ -190,7 +190,7 @@ Mutation *TradersMutation* allows user to create new traders and/or update exist
 
 ### Testing
 
-Integration tests are placed in project *TraderServiceTest* (directory .\Test) in class *GqlControllerTests*.  In-memory service is used for integration tests (please see *IntegrationTest* base class for tests). This approach is considerably reduces efforts to develop integration tests. Tests may be run out-of-the-box since they create and initially fill database.
+Integration tests are placed in project *TraderServiceTest* (directory .\Test) in class *GqlControllerTests*.  In-memory service is used for integration tests (please see *IntegrationTest* base class for tests). This approach considerably reduces efforts to develop integration tests. Tests may be run out-of-the-box since they create and initially fill database.
 
 
 
