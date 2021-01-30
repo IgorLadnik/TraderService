@@ -16,12 +16,12 @@ namespace GraphQlHelperLib
             _typeName = typeof(T).FullName;
         }
 
-        protected Task CacheDataFromRepo(Func<bool> shouldFetchFromRepo, Func<Task> func) =>
+        protected Task CacheDataFromRepo(Func<bool> shouldFetchFromRepo, Func<Task> fetchFromRepo) =>
             Task.Run(async () =>
             {
                 using (await _lock.LockAsync())
                     if (shouldFetchFromRepo())
-                        await func();
+                        await fetchFromRepo();
             });
     }
 }
