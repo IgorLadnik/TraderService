@@ -25,6 +25,7 @@ namespace TraderModelLib
             // Input types
             services.AddTransient<CryptocurrencyInputType>();
             services.AddTransient<TraderInputType>();
+            services.AddTransient<FilterInputType>();
 
             // Output types
             services.AddTransient<TraderOutputType>();

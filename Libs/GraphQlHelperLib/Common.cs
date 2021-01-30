@@ -65,6 +65,19 @@ namespace GraphQlHelperLib
             return argNullable != null ? (T)argNullable : default;
         }
 
+        public static Dictionary<string, object> GetArgument(this IResolveFieldContext context, string argName)
+        {
+            var argNullable = context.Arguments[argName];
+            if (argNullable != null)
+            {
+                var dct = argNullable as Dictionary<string, object>;
+                if (dct != null)
+                    return dct;
+            }
+
+            return null;
+        }
+
         #endregion // User for authentication
 
         #region Sort
