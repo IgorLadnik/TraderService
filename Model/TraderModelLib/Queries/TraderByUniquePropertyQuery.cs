@@ -3,6 +3,7 @@ using System.Linq.Dynamic.Core;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using GraphQL;
 using GraphQL.Types;
 using GraphQlHelperLib;
 using TraderModelLib.Data;

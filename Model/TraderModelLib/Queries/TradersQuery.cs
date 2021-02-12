@@ -2,6 +2,7 @@
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using GraphQL;
 using GraphQL.Types;
 using GraphQlHelperLib;
 using TraderModelLib.Data;
